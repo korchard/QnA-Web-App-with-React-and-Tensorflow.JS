@@ -22,6 +22,8 @@ const App = () => {
   const [model, setModel] = useState(null); 
 
   // 4. Load Tensorflow Model
+  useEffect(()=>{loadModel()}, [])
+
   const loadModel = async ()=>{
     const loadedModel = await qna.load()
     setModel(loadedModel); 
@@ -38,11 +40,8 @@ const App = () => {
       const answers = await model.findAnswers(question, passage)
       setAnswer(answers); 
       console.log(answers)
-
     }  
   }
-
-  useEffect(()=>{loadModel()}, [])
 
   // 2. Setup input, question and result area
   return (
@@ -65,7 +64,7 @@ const App = () => {
             <input ref={questionRef} onKeyPress={answerQuestion} size="80"></input>
             <br /> 
             Answers
-            {answer ? answer.map((ans, idx) =><div><b>Answer {idx+1} - </b> {ans.text} ({Math.floor(ans.score*100)/100})</div>) : ""}
+            {answer ? answer.map((ans, idx) =><div key={idx}><b>Answer {idx+1} - </b> {ans.text} ({Math.floor(ans.score*100)/100})</div>) : ""}
             </React.Fragment>
         } 
       </header>
